@@ -1,5 +1,9 @@
 # Hospedagem gratuita do Hipe Online
 
+> **Situação atual (25/11/2026):** servidor no ar em https://hipe-online.onrender.com, usando o **Postgres grátis do próprio Render** (`hipe-db`, ligado automaticamente pelo `render.yaml`, sem senha manual).
+> **Atenção:** o Postgres grátis do Render **expira 30 dias após a criação**. Antes disso, faça upgrade no Render (cerca de US$ 7/mês) ou migre para o Supabase: o projeto `hipe-online` já existe, com as tabelas criadas. Para migrar, troque `DATABASE_URL` no `render.yaml` por `postgresql://postgres.jyxfstsxzgxyrxlsgpqq@aws-0-sa-east-1.pooler.supabase.com:5432/postgres`, use `DATABASE_SSL=true` e adicione `DB_PASSWORD` no painel do Render com a senha do Supabase.
+> O deploy automático a cada envio ao GitHub não disparou; use **Manual Deploy › Deploy latest commit** no painel.
+
 Objetivo: servidor na nuvem, banco permanente e jogadores entrando de qualquer lugar, com o seu PC desligado.
 
 ## 1. Comparação (pesquisada em novembro de 2026)
