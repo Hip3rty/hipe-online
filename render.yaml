@@ -1,5 +1,5 @@
 # Blueprint do Render (https://render.com/docs/blueprint-spec)
-# No painel: New > Blueprint > selecione o repositório. Depois preencha DATABASE_URL (Supabase/Neon).
+# O endereço do banco (sem senha) já vem preenchido. No painel só é preciso colar a senha em DB_PASSWORD.
 services:
   - type: web
     name: hipe-online
@@ -9,8 +9,11 @@ services:
     healthCheckPath: /health
     autoDeploy: true
     envVars:
+      # Supabase, projeto hipe-online (Session pooler, São Paulo). Não contém senha.
       - key: DATABASE_URL
-        sync: false # cole a connection string do Supabase ou Neon no painel
+        value: postgresql://postgres.jyxfstsxzgxyrxlsgpqq@aws-0-sa-east-1.pooler.supabase.com:5432/postgres
+      - key: DB_PASSWORD
+        sync: false # cole aqui a senha do banco (Supabase › Database Settings › Reset password)
       - key: DATABASE_SSL
         value: "true"
       - key: SAVE_INTERVAL_MS

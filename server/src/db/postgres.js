@@ -7,11 +7,24 @@ import { log } from '../log.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
+// Monta a conexão a partir do DATABASE_URL. Se DB_PASSWORD existir, ele substitui a senha do URL:
+// assim o endereço (sem segredo) fica no render.yaml e só a senha é colada no painel.
+export function connectionConfig(url, password) {
+  const u = new URL(url);
+  return {
+    host: u.hostname,
+    port: Number(u.port || 5432),
+    user: decodeURIComponent(u.username),
+    password: password || decodeURIComponent(u.password),
+    database: decodeURIComponent(u.pathname.replace(/^\//, '')) || 'postgres',
+  };
+}
+
 export class PostgresStore {
-  constructor(url, ssl) {
+  constructor(url, ssl, password = process.env.DB_PASSWORD || '') {
     this.kind = 'postgres';
     this.pool = new pg.Pool({
-      connectionString: url,
+      ...connectionConfig(url, password.trim()),
       ssl: ssl ? { rejectUnauthorized: false } : false,
       max: 5,
       idleTimeoutMillis: 30000, // libera conexões ociosas (permite o banco "dormir" no plano grátis)
@@ -36,7 +49,13 @@ export class PostgresStore {
 
   async init() {
     const sql = fs.readFileSync(path.join(here, 'schema.sql'), 'utf8');
-    await this.q(sql);
+    try {
+      await this.q(sql);
+    } catch (err) {
+      if (err.code === '28P01') log.error('SENHA DO BANCO INCORRETA: confira a variável DB_PASSWORD no painel da hospedagem (a mesma senha definida no Supabase).');
+      else if (/tenant|ENOTFOUND/i.test(err.message)) log.error('ENDEREÇO DO BANCO INCORRETO: confira DATABASE_URL (host do Session pooler e usuário postgres.<ref>).');
+      throw err;
+    }
     await this.q('DELETE FROM sessions WHERE expires_at < now()');
     log.info('postgres ready');
   }
