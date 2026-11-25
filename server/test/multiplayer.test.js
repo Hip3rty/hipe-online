@@ -65,6 +65,18 @@ after(async () => {
   await srv.shutdown('test');
 });
 
+test('mensagens enviadas juntas antes do login não são descartadas', async () => {
+  const c = new Client(srv.port);
+  await c.open();
+  c.send({ t: 'hello', v: 1 });
+  c.send({ t: 'register', u: 'rajada_user', p: 'segredo123' });
+  c.send({ t: 'chars' });
+  await c.wait((m) => m.t === 'hello');
+  await c.wait((m) => m.t === 'auth_ok');
+  await c.wait((m) => m.t === 'chars');
+  c.close();
+});
+
 test('cadastro duplicado e senha errada são recusados', async () => {
   const c = new Client(srv.port);
   await c.open();

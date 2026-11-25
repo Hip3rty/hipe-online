@@ -64,13 +64,19 @@ export class Connection {
       catch (err) { log.error('handler error', { t: msg.t, err: err.stack }); }
       return;
     }
-    if (this.busy) return;
-    this.busy = true;
-    try { await this.preGame(msg); }
-    catch (err) {
-      log.error('pregame error', { t: msg.t, err: err.message });
-      this.send({ t: 'err', m: 'Erro no servidor. Tente novamente.' });
-    } finally { this.busy = false; }
+    // mensagens antes de entrar no mundo são processadas em fila, na ordem de chegada
+    // (ex.: "hello" + "resume" chegam juntas na reconexão; nenhuma pode ser descartada)
+    if (this.pending >= 10) return;
+    this.pending = (this.pending || 0) + 1;
+    this.queue = (this.queue || Promise.resolve()).then(async () => {
+      try {
+        if (this.state === 'game' && this.player) handleGameMessage(game, this.player, msg, Date.now());
+        else await this.preGame(msg);
+      } catch (err) {
+        log.error('pregame error', { t: msg.t, err: err.message });
+        this.send({ t: 'err', m: 'Erro no servidor. Tente novamente.' });
+      } finally { this.pending--; }
+    });
   }
 
   async preGame(msg) {
