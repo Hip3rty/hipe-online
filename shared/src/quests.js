@@ -1,0 +1,51 @@
+// Missões e conquistas (dados). A lógica fica no servidor.
+// type: hunt (matar), collect (entregar itens), explore (visitar regiões/baús), daily (caça diária repetível)
+export const QUESTS = {
+  q_slimes: { giver: 'captain', name: 'Praga Gelatinosa', type: 'hunt', target: 'slime', count: 10, minLevel: 1,
+    desc: 'Os slimes estão invadindo as plantações. Elimine 10 deles na floresta.', reward: { xp: 120, gold: 50 } },
+  q_wolves: { giver: 'captain', name: 'Uivos na Noite', type: 'hunt', target: 'wolf', count: 12, minLevel: 3, requires: 'q_slimes',
+    desc: 'Lobos atacam viajantes na estrada. Cace 12 lobos.', reward: { xp: 320, gold: 120, item: 'hp_potion_m', q: 5 } },
+  q_silk: { giver: 'captain', name: 'Fios de Seda', type: 'collect', target: 'spider_silk', count: 8, minLevel: 5,
+    desc: 'O alfaiate precisa de 8 Sedas de Aranha.', reward: { xp: 520, gold: 220 } },
+  q_goblins: { giver: 'captain', name: 'Ameaça Verde', type: 'hunt', target: 'goblin', count: 20, minLevel: 7, requires: 'q_wolves',
+    desc: 'Os goblins do leste estão se organizando. Derrote 20 goblins.', reward: { xp: 1600, gold: 450, item: 'shield_bronze', q: 1, rarity: 1 } },
+  q_explore: { giver: 'captain', name: 'Cartógrafo Aventureiro', type: 'explore', targets: ['goblin', 'desert', 'cave', 'frozen'], minLevel: 8,
+    desc: 'Visite o Campo dos Goblins, o Deserto, a Caverna dos Esqueletos e as Montanhas Congeladas.', reward: { xp: 3200, gold: 1000 } },
+  q_skeletons: { giver: 'captain', name: 'Ossos Inquietos', type: 'hunt', target: 'skeleton', count: 25, minLevel: 11,
+    desc: 'Algo desperta os mortos na caverna a oeste. Destrua 25 esqueletos.', reward: { xp: 3800, gold: 750 } },
+  q_tusks: { giver: 'captain', name: 'Troféus de Guerra', type: 'collect', target: 'orc_tusk', count: 10, minLevel: 12,
+    desc: 'Traga 10 Presas de Orc como prova de bravura.', reward: { xp: 3200, gold: 600, item: 'ring_power', q: 1 } },
+  q_mummies: { giver: 'captain', name: 'Maldição das Areias', type: 'hunt', target: 'mummy', count: 25, minLevel: 18,
+    desc: 'Múmias vagam pelo deserto ao sul. Derrote 25.', reward: { xp: 9000, gold: 1800 } },
+  q_yeti: { giver: 'hermit', name: 'O Terror Branco', type: 'hunt', target: 'yeti', count: 15, minLevel: 26,
+    desc: 'Os yetis destruíram minha cabana. Derrote 15 deles.', reward: { xp: 32000, gold: 4000 } },
+  q_frozen_chest: { giver: 'hermit', name: 'Tesouro Esquecido', type: 'explore', targets: ['chest:c_frozen'], minLevel: 24,
+    desc: 'Dizem que há um baú escondido nos picos mais distantes. Encontre-o.', reward: { xp: 15000, gold: 2000 } },
+  q_demons: { giver: 'warden', name: 'Portões do Abismo', type: 'hunt', target: 'demon', count: 20, minLevel: 40,
+    desc: 'Demônios saem da masmorra. Destrua 20 deles.', reward: { xp: 130000, gold: 15000 } },
+  q_dragon: { giver: 'warden', name: 'Matador de Dragões', type: 'hunt', target: 'dragon', count: 1, minLevel: 50, requires: 'q_demons',
+    desc: 'Derrote o Dragão Abissal nas profundezas da masmorra.', reward: { xp: 500000, gold: 50000, item: 'ring_dragon', q: 1 } },
+  // diárias
+  d_low: { giver: 'captain', name: 'Diária: Patrulha da Floresta', type: 'hunt', daily: true, targetAny: ['slime', 'wolf', 'spider'], count: 25, minLevel: 1, maxLevel: 12,
+    desc: 'Derrote 25 criaturas da floresta hoje.', reward: { xp: 600, gold: 200, item: 'hp_potion_m', q: 3 } },
+  d_mid: { giver: 'captain', name: 'Diária: Limpeza das Fronteiras', type: 'hunt', daily: true, targetAny: ['goblin', 'goblin_archer', 'orc', 'skeleton', 'zombie', 'skeleton_mage', 'scorpion', 'mummy'], count: 30, minLevel: 10, maxLevel: 30,
+    desc: 'Derrote 30 monstros das terras exteriores hoje.', reward: { xp: 6000, gold: 1200, item: 'hp_potion_l', q: 3 } },
+  d_high: { giver: 'warden', name: 'Diária: Caçada Extrema', type: 'hunt', daily: true, targetAny: ['ice_wolf', 'yeti', 'imp', 'demon', 'death_knight'], count: 30, minLevel: 26,
+    desc: 'Derrote 30 monstros perigosos hoje.', reward: { xp: 45000, gold: 6000, item: 'hp_potion_l', q: 6 } },
+};
+for (const [id, q] of Object.entries(QUESTS)) q.id = id;
+
+export const ACHIEVEMENTS = {
+  first_blood: { name: 'Primeiro Sangue', desc: 'Derrote seu primeiro monstro.', gold: 20 },
+  hunter_100: { name: 'Caçador', desc: 'Derrote 100 monstros.', gold: 300 },
+  hunter_1000: { name: 'Exterminador', desc: 'Derrote 1.000 monstros.', gold: 3000 },
+  lvl_10: { name: 'Aventureiro', desc: 'Alcance o nível 10.', gold: 200 },
+  lvl_25: { name: 'Veterano', desc: 'Alcance o nível 25.', gold: 1500 },
+  lvl_50: { name: 'Lenda Viva', desc: 'Alcance o nível 50.', gold: 10000 },
+  explorer: { name: 'Explorador', desc: 'Visite todas as regiões do mundo.', gold: 2000 },
+  treasure: { name: 'Caçador de Tesouros', desc: 'Encontre todos os baús secretos.', gold: 5000 },
+  pvp_first: { name: 'Duelista', desc: 'Derrote outro jogador em PvP.', gold: 100 },
+  dragon_slayer: { name: 'Matador de Dragões', desc: 'Derrote o Dragão Abissal.', gold: 20000 },
+  rich: { name: 'Magnata', desc: 'Tenha 10.000 moedas.', gold: 0 },
+  quests_10: { name: 'Herói da Vila', desc: 'Conclua 10 missões.', gold: 2500 },
+};

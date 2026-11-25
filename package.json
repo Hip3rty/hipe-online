@@ -1,0 +1,23 @@
+{
+  "name": "hipe-online",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Hipe Online - MMORPG 2D pixel art para celular (cliente + servidor autoritativo)",
+  "type": "module",
+  "workspaces": [
+    "shared",
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "npm run dev:server & npm run dev:client",
+    "dev:server": "npm run start -w server",
+    "dev:client": "npm run dev -w client",
+    "build": "npm run build -w client",
+    "start": "npm run start -w server",
+    "test": "npm test -w server"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "appId": "com.hipeonline.game",
+  "appName": "Hipe Online",
+  "webDir": "dist",
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#140c22"
+  },
+  "ios": {
+    "backgroundColor": "#140c22",
+    "contentInset": "never"
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}

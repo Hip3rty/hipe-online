@@ -1,0 +1,21 @@
+# Blueprint do Render (https://render.com/docs/blueprint-spec)
+# No painel: New > Blueprint > selecione o repositório. Depois preencha DATABASE_URL (Supabase/Neon).
+services:
+  - type: web
+    name: hipe-online
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        sync: false # cole a connection string do Supabase ou Neon no painel
+      - key: DATABASE_SSL
+        value: "true"
+      - key: SAVE_INTERVAL_MS
+        value: "60000"
+      - key: MAX_PLAYERS
+        value: "150"
+      - key: LOG_LEVEL
+        value: info

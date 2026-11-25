@@ -1,0 +1,10 @@
+{
+  "name": "@hipe/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Código e dados compartilhados entre cliente e servidor (mapa, itens, monstros, fórmulas).",
+  "exports": {
+    "./*": "./src/*"
+  }
+}
