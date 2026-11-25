@@ -1,21 +1,31 @@
 # Blueprint do Render (https://render.com/docs/blueprint-spec)
-# O endereço do banco (sem senha) já vem preenchido. No painel só é preciso colar a senha em DB_PASSWORD.
+# Banco grátis do próprio Render, ligado automaticamente ao servidor: nenhuma senha para copiar.
+# ATENÇÃO: o Postgres grátis do Render expira 30 dias após a criação (dá para fazer upgrade antes).
+# Para um banco permanente (Supabase), troque DATABASE_URL por um valor fixo e adicione DB_PASSWORD
+# (veja docs/DEPLOY.md).
+databases:
+  - name: hipe-db
+    plan: free
+    region: oregon
+    databaseName: hipe
+    user: hipe
+
 services:
   - type: web
     name: hipe-online
     runtime: docker
     plan: free
+    region: oregon
     dockerfilePath: ./Dockerfile
     healthCheckPath: /health
     autoDeploy: true
     envVars:
-      # Supabase, projeto hipe-online (Session pooler, São Paulo). Não contém senha.
       - key: DATABASE_URL
-        value: postgresql://postgres.jyxfstsxzgxyrxlsgpqq@aws-0-sa-east-1.pooler.supabase.com:5432/postgres
-      - key: DB_PASSWORD
-        sync: false # cole aqui a senha do banco (Supabase › Database Settings › Reset password)
+        fromDatabase:
+          name: hipe-db
+          property: connectionString
       - key: DATABASE_SSL
-        value: "true"
+        value: "false" # conexão interna da rede do Render
       - key: SAVE_INTERVAL_MS
         value: "60000"
       - key: MAX_PLAYERS
